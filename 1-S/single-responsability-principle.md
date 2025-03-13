@@ -7,9 +7,9 @@ This principle helps developers to reduce dependencies, easier management and be
 When working with IaC, this principle usually is related to ensuring that each module has one clear purpose and one reason to change.
 
 For example:
-<main.tf>
 
 ```Terraform
+#before/main.tf 
 terraform {
   required_providers {
     azurerm = {
@@ -80,7 +80,7 @@ Probably, this hurts your eyes as much as it did mine. This code snippet violate
 Now, time to refactor the code following the S principle:
 
 ```Terraform
-# providers.tf
+# after/providers.tf
 terraform {
   required_providers {
     azurerm = {
@@ -90,7 +90,7 @@ terraform {
   }
   required_version = "1.5.7"
 }
-# variables.tf
+# after/variables.tf
 variable "resource_group_name" {}
 variable "nic_name" {}
 variable "location" {}
@@ -101,7 +101,7 @@ variable "storage_os_name" {}
 variable "vnet_name" {}
 variable "address_space" {}
 variable "sbn_name" {}
-# main.tf
+# after/main.tf
 module "vm" {
   location            = var.location
   source              = "./modules/vm/"
