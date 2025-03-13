@@ -128,3 +128,10 @@ module "vnet" {
 ```
 
 Now, each module has its own responsibility as well as clear boundaries, ensuring better maintainability, reusability, and separation of concerns. The root module (main.tf) acts as the orchestrator, managing dependencies without tightly coupling infrastructure components.
+
+Each module is self-contained and handles a specific aspect of the infrastructure, such as networking, compute, or storage. This modular approach allows updates to be made in a controlled manner, ensuring that:
+
+* Each module can be updated independently without affecting the others.
+Changes are made in the correct place, reducing the risk of unintended modifications.
+* If a specific component, like the virtual network, needs an update, it can be modified without touching the VM or subnet configurations.
+* The root module (main.tf) remains clean and only orchestrates deployments, without managing infrastructure logic directly.
