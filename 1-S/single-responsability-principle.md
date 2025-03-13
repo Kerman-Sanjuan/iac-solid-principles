@@ -70,11 +70,14 @@ resource "azurerm_subnet" "this" {
 }
 ```
 
-Probably, this hurt your eyes as much as it did it to me. This code snippet violates the principle in many ways and layers
+Probably, this hurts your eyes as much as it did mine. This code snippet violates the Single Responsibility Principle (SRP) in multiple ways and layers:
 
- 1. **All the IaC is defined on the same file**: This makes not only hard to read, but also makes that may be more than one reason to modify.
- 2. **Different categories and lifecycle**: Not only are defined different "kind" of resources on the same place, but also with different lifecycle.
- 3.
+1. All the IaC is defined in a single file: This makes it not only hard to read and maintain, but also increases the likelihood that multiple unrelated changes will be needed in the same place.
+2. Mixing different categories and lifecycles: The file defines networking, compute, and storage resources together, despite having distinct purposes and change frequencies.
+3. No separation of concerns: Updating the virtual network would require modifying the same file that manages virtual machines, increasing the risk of unintended changes.
+4. Poor reusability and scalability: Without modularization, it becomes difficult to reuse components in different projects or environments.
+
+Now, time to refactor the code following the S principle:
 
 ```Terraform
 # providers.tf
