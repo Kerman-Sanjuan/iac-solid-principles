@@ -75,3 +75,56 @@ Probably, this hurt your eyes as much as it did it to me. This code snippet viol
  1. **All the IaC is defined on the same file**: This makes not only hard to read, but also makes that may be more than one reason to modify.
  2. **Different categories and lifecycle**: Not only are defined different "kind" of resources on the same place, but also with different lifecycle.
  3.
+
+```Terraform
+# providers.tf
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=3.0.0"
+    }
+  }
+  required_version = "1.5.7"
+}
+# variables.tf
+variable "resource_group_name" {}
+variable "nic_name" {}
+variable "location" {}
+variable "vm_size" {}
+variable "vm_name" {}
+variable "storage_disk_name" {}
+variable "storage_os_name" {}
+variable "vnet_name" {}
+variable "address_space" {}
+variable "sbn_name" {}
+# main.tf
+module "vm" {
+  location            = var.location
+  source              = "./modules/vm/"
+  vm_name             = var.vm_name
+  storage_os_name     = var.storage_os_name
+  storage_disk_name   = var.storage_disk_name
+  nic_name            = var.nic_name
+  vm_size             = var.vm_size
+  resource_group_name = var.resource_group_name
+}
+
+module "sbn" {
+  source              = "./modules/subnet/"
+  resource_group_name = var.resource_group_name
+  sbn_name            = var.sbn_name
+  vnet_name           = var.vnet_name
+  location            = var.location
+}
+
+module "vnet" {
+  source              = "./modules/vnet/"
+  vnet_name           = var.vnet_name
+  address_space       = var.address_space
+  resource_group_name = var.resource_group_name
+  location            = var.location
+}
+```
+
+Now, each module has its own responsibility as well as clear boundaries, ensuring better maintainability, reusability, and separation of concerns. The root module (main.tf) acts as the orchestrator, managing dependencies without tightly coupling infrastructure components.
