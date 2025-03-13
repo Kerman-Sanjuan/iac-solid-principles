@@ -1,15 +1,3 @@
-# Single responsibility principle on Terraform
-
-By definition, this principle states that a class or function should only have one responsibility. Even more, it should only have one reason to change.
-
-This principle helps developers to reduce dependencies, easier management and better understanding of the business logic.
-
-When working with IaC, this principle usually is related to ensuring that each module has one clear purpose and one reason to change.
-
-For example:
-<main.tf>
-
-```Terraform
 terraform {
   required_providers {
     azurerm = {
@@ -29,6 +17,7 @@ variable "storage_disk_name" {}
 variable "storage_os_name" {}
 
 resource "azurerm_network_interface" "this" {
+
   name                = var.nic_name
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -68,10 +57,3 @@ resource "azurerm_subnet" "this" {
   name                 = var.sbn_name
   resource_group_name  = var.resource_group_name
 }
-```
-
-Probably, this hurt your eyes as much as it did it to me. This code snippet violates the principle in many ways and layers
-
- 1. **All the IaC is defined on the same file**: This makes not only hard to read, but also makes that may be more than one reason to modify.
- 2. **Different categories and lifecycle**: Not only are defined different "kind" of resources on the same place, but also with different lifecycle.
- 3.
